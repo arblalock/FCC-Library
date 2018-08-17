@@ -6,4 +6,8 @@ let bookSchema = new Schema({
   comments: [String]
 })
 
-module.exports = mongoose.model('book', bookSchema)
+if (process.env.NODE_ENV === 'test') {
+  module.exports = mongoose.model('test_book', bookSchema)
+} else {
+  module.exports = mongoose.model('book', bookSchema)
+}

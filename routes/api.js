@@ -18,14 +18,13 @@ module.exports = function (app, db) {
         if (err) return console.log(err)
         let bks = []
         for (let i = 0; i < result.length; i++) {
-          bks.push({_id: result[i]._id, book_title: result[i].title, num_of_comments: result[i].comments.length})
+          bks.push({_id: result[i]._id, title: result[i].title, commentcount: result[i].comments.length})
         }
         return res.send(bks)
       })
     })
 
     .post(function (req, res) {
-      // console.
       if (!req.body.title || typeof req.body.title !== 'string') return res.send('no title')
       let newBook = book({title: req.body.title, comments: []})
       newBook.save((err, doc) => {
@@ -36,12 +35,20 @@ module.exports = function (app, db) {
 
     .delete(function (req, res) {
       // if successful response will be 'complete delete successful'
+      book.remove({}, (err) => {
+        if (err) return console.error(err)
+        return res.send({msg: 'complete delete successful'})
+      })
     })
-    //* ***********start here***************
   app.route('/api/books/:id')
     .get(function (req, res) {
-      // var bookid = req.params.id
-      // json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      let bookid = req.params.id
+      if (!bookid || !mongoose.Types.ObjectId.isValid(bookid)) return res.send('invalid id')
+      book.findById(bookid, (err, doc) => {
+        if (err) return console.error(err)
+        if (!doc) return res.send('no book exists')
+        return res.json({title: doc.title, _id: doc._id, comments: doc.comments})
+      })
     })
     // for positing comments
     .post(function (req, res) {
@@ -57,7 +64,12 @@ module.exports = function (app, db) {
     })
 
     .delete(function (req, res) {
-      // var bookid = req.params.id
-      // if successful response will be 'delete successful'
+      let bookid = req.params.id
+      if (!bookid || !mongoose.Types.ObjectId.isValid(bookid)) return res.send('invalid id')
+      book.findByIdAndRemove(bookid, (err, doc) => {
+        if (err) return console.error(err)
+        if (!doc) return res.send('no book exists')
+        return res.send('delete successful')
+      })
     })
 }
