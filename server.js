@@ -38,6 +38,7 @@ mongoose.connect(process.env.DB, (err, db) => {
 
   app.listen(process.env.PORT || 3000, function () {
     console.log('Listening on port ' + (process.env.PORT || 3000))
+
     if (process.env.NODE_ENV === 'test') {
       console.log('Running Tests...')
       setTimeout(function () {
