@@ -17,27 +17,11 @@ chai.use(chaiHttp)
 let fakeBook = {title: 'Fake1', comments: ['liked a lot!']}
 
 suite('Functional Tests', function () {
-  // test('#example Test GET /api/books', function (done) {
-  //   chai.request(server)
-  //     .get('/api/books')
-  //     .end(function (err, res) {
-  //       if (err) return console.log(err)
-  //       assert.equal(res.status, 200)
-  //       assert.isArray(res.body, 'response should be an array')
-  //       assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount')
-  //       assert.property(res.body[0], 'title', 'Books in array should contain title')
-  //       assert.property(res.body[0], '_id', 'Books in array should contain _id')
-  //       done()
-  //     })
-  // })
 
   suite('Routing tests', function () {
     let testID
     before(function () {
       let testBooks = [{title: 'Test1', comments: ['liked a lot!']}, {title: 'Test2', comments: []}]
-      // book.collection.insert(testBooks, (err) => {
-      //   if (err) return console.error(err)
-      // })
       let oneBook = book(testBooks[0])
       oneBook.save((err, doc) => {
         if (err) return console.error(err)
